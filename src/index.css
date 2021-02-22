@@ -4,7 +4,7 @@
 }
 body{
   font-family: "heebo";
-  direction: rtl;
+  direction: rtl!important;
   background-color: #F7F8FC!important;
 }
 h2{

@@ -12,12 +12,15 @@
   .info4{
     display:none;
   }
+  .info{
+    width:99%!important;
+  }
   .info1,.info2,.info3{
-    width:33.333%;
+    width:33.333%!important;
     margin:0 auto;
   }
   .info_img{
-    height:40px!important;
+    height:60px!important;
   }
   
 }
@@ -146,4 +149,7 @@ input[type="radio"]{
 .product_image{
   max-height: 200px;
   min-height: 200px;
+}
+.login{
+  direction: ltr!important;
 }
