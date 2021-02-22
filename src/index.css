@@ -5,7 +5,7 @@
 body{
   font-family: "heebo";
   direction: rtl;
-  background-color: #F7F8FC;
+  background-color: #F7F8FC!important;
 }
 h2{
   color: #3A3C3E;
