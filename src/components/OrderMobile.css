@@ -1,0 +1,31 @@
+.order-mobile-container{
+    width:100%;
+    position: sticky;
+    bottom:0;
+    z-index: 100;
+    background-image: url("https://impact-il.com/wp-content/uploads/2021/02/buttonbackground.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.order-mobile-container .order-mobile h2{
+    color: #FFFFFF;
+    font-family: "Heebo", Sans-serif;
+    font-weight: 600;
+    font-size:28px;
+    padding-top:8px;
+    text-align: center;
+}
+.order-mobile{
+    box-sizing: border-box;
+    padding-bottom:8px;
+}
+.order-mobile-phone, .order-mobile-whatsapp{
+    width:50%;
+    margin:0px 5px;
+}
+.order-mobile-phone img, .order-mobile-whatsapp img{
+    width:100%;
+}
+.order-mobile-buttons{
+    display: flex;
+}

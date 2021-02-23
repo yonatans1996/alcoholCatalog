@@ -26,7 +26,8 @@ function Form() {
         setMl('');
         setMlPrice('');
         setLocation(true);
-        
+        document.getElementById('top').checked=false;
+        document.getElementById('bottom').checked = false;
     }
    
     return (
@@ -53,8 +54,8 @@ function Form() {
                 <input value={price} onChange={e=>setPrice(e.target.value)} type="text" required /> 
             </label>
             <h6 className="label_name" style={{textAlign:"center"}}>מיקום המוצר: (במידה ולא נבחר המוצר יהיה למעלה)</h6>
-            <label><input  onChange={e=>setLocation(true)} type="radio" value="למעלה" name="top"/>למעלה</label>
-            <label><input  onChange={e=>setLocation(false)} type="radio" value="למעלה" name="top"/>למטה</label>
+            <label><input id="top"  onChange={e=>setLocation(true)} type="radio" value="למעלה" name="top"/>למעלה</label>
+            <label><input id="bottom" onChange={e=>setLocation(false)} type="radio" value="למטה" name="top"/>למטה</label>
             <button type="submit">הוסף מוצר</button>
             
         </form>

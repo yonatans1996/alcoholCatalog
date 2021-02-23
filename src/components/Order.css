@@ -1,0 +1,30 @@
+.order-container{
+    width:100%;
+    max-width: 1200px;
+    text-align: center;
+    margin:0 auto;
+}
+.order-container h2{
+    color: #512732;
+    font-family: "Heebo", Sans-serif;
+    font-size: 45px;
+    font-weight: 600;
+}
+.order-buttons{
+    display: flex;
+    
+}
+.order-phone, .order-whatsapp{
+    width:50%;
+    padding:0 10px;
+
+}
+.order-phone img, .order-whatsapp img{
+    width:100%;
+}
+.order-container p{
+    color:#54595F;
+    font-size: 16px;
+    font-weight: 400;
+    padding-top:10px;
+}
