@@ -5,8 +5,11 @@ function FooterPc() {
         <div className="footer-pc">
             <div className="footer">
                 <h2>סניפים:</h2>
-                <p>
+                <p id="footer-pc">
                     רחוב הגלעד 1, מתחם תבורי, פרדס חנה | רחוב צה”ל 35 , מתחם מיקס, חדרה
+                </p>
+                <p id="footer-mobile">
+                רחוב הגלעד 1, מתחם תבורי, פרדס חנה<br/>רחוב צה”ל 35 , מתחם מיקס, חדרה
                 </p>
                 
             </div>
