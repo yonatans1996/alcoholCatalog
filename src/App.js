@@ -13,6 +13,8 @@ import Order from "./components/Order"
 import FooterPc from "./components/FooterPc"
 import Warning from "./components/Warning"
 import OrderMobile from "./components/OrderMobile"
+
+
 function App() {
   const [width, setWidth]   = useState(window.innerWidth);
 function updateDimensions(){

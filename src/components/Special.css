@@ -64,3 +64,20 @@
 .special-container img{
     width:100%;
 }
+.special-admin-button-pc{
+    margin:0 25px;
+}
+.special-admin{
+    width:100%;
+    max-width: 1200px;
+    margin:0 auto;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+@media (max-width:740px)
+{
+    .special-admin{
+        display:none;
+    }
+}

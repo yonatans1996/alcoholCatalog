@@ -1,0 +1,13 @@
+.admin-header-buttons{
+    width:100%;
+    max-width: 1200px;
+    margin:0 auto;
+    display:flex;
+    justify-content: center;
+}
+@media(max-width:740px)
+{
+    .admin-header-buttons{
+        display:none;
+    }
+}
