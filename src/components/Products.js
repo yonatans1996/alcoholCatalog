@@ -37,7 +37,7 @@ function Products({location}) {
     return (
         <div className="products">
             {list.filter((p)=>p.title!=null).map(product=>{
-                    return( <Product handleDelete={handleDelete} image={product.image} id={product.id} key={product.id} title={product.title} price={product.price} ml={product.ml} mlPrice={product.mlPrice} />)
+                    return( <Product handleDelete={handleDelete} image={product.image} id={product.id} key={product.id} title={product.title} price={product.price} ml={product.ml} />)
             })}
         </div>
     )

@@ -12,4 +12,5 @@ var firebaseConfig = {
   // Initialize Firebase
   export const app=firebase.initializeApp(firebaseConfig);
   export const auth=app.auth();
-  export default firebase;
+  const storage=firebase.storage();
+  export {storage,firebase as default}
