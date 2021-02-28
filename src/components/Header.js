@@ -2,77 +2,77 @@ import React,{useState,useEffect} from 'react'
 import {useAuth} from "./Auth/AuthContext"
 import {Button,OverlayTrigger,Popover} from "react-bootstrap"
 import "./Header.css"
-import firebase from "./firebase";
+import {storage} from "./firebase";
 function Header() {
     const {currentUser}=useAuth();
-    const [pcUrl,setPcUrl]=useState('');
-    const [mobileUrl,setMobileUrl]=useState('');
     const [pcLink,setPcLink]=useState('');
     const [mobileLink,setMobileLink]=useState('');
+    const [filePc, setFilePc] = useState(null);
+    const [fileMobile, setFileMobile] = useState(null);
+    const closePop=React.createRef();
 
     const popover1 = (
         <Popover id="popover-basic">
-          <Popover.Title as="h3">הכנס כתובת תמונה</Popover.Title>
+          <Popover.Title as="h3">שינוי תמונת הדר</Popover.Title>
           <Popover.Content>
-            <input type="text" onKeyPress={handlePcinput} value={pcUrl} onChange={handlePcinput} />
+            <input type="file" onChange={handlePcChange} />
+            <Button onClick={handlePcinput} className="mt-1" variant="dark">העלאת תמונה</Button>
           </Popover.Content>
         </Popover>
       );
+
       const popover2 = (
         <Popover id="popover-basic">
-          <Popover.Title as="h3">הכנס כתובת תמונה</Popover.Title>
+          <Popover.Title as="h3"> שינוי תמונת הדר במובייל</Popover.Title>
           <Popover.Content>
-            <input type="text" onKeyPress={handleMobileinput} value={mobileUrl} onChange={handleMobileinput} />
+            <input type="file" onChange={handleMobileChange} />
+            <Button onClick={handleMobileinput} className="mt-1" variant="dark">העלאת תמונה</Button>
           </Popover.Content>
         </Popover>
       );
-      async function handlePcinput(e){
-        setPcUrl(e.target.value);
-        if(e.key==="Enter")
-        {
-            const database=await firebase.database().ref("headerImage");
-            database.set(pcUrl);
-            setPcUrl('');
-            database.on('value',(snapshot)=>{
-            const data=snapshot.val();
-            if(data){
-             setPcLink(data);
-            }
-            }
-            );
-        }
 
+      function handlePcChange(e){
+        setFilePc(e.target.files[0]);
       }
-      async function handleMobileinput(e){
-        setMobileUrl(e.target.value);
-        if(e.key==="Enter")
-        {
-            const database=await firebase.database().ref("headerImageMobile");
-            database.set(mobileUrl);
-            setMobileUrl('');
-            database.on('value',(snapshot)=>{
-            const data=snapshot.val();
-            if(data){
-             setMobileLink(data);
-            }
-            }
-            );
-        }
-
-      }
-      useEffect(()=>{
-        const dbMobile=firebase.database().ref("headerImageMobile");
-        const dbPc=firebase.database().ref("headerImage");
-        dbMobile.on('value',(snapshot)=>{
-          const data=snapshot.val();
-           setMobileLink(data);
-          
+      function handlePcinput(){
+        if(!filePc)
+        return;
+          const uploadTask = storage.ref("headerImage").put(filePc);
+          closePop.current.click();
+          uploadTask.on("state_changed", console.log, console.error, () => {
+            storage
+              .ref("headerImage")
+              .getDownloadURL()
+              .then((url) => {
+                setFilePc(null);
+                setPcLink(url);
+              });
           });
-          dbPc.on('value',(snapshot)=>{
-            const data=snapshot.val();
-             setPcLink(data);
-            
-            });
+      }
+
+      function handleMobileChange(e){
+        setFileMobile(e.target.files[0]);
+      }
+      function handleMobileinput(){
+        if(!fileMobile)
+        return;
+          const uploadTask = storage.ref("headerImageMobile").put(fileMobile);
+          closePop.current.click();
+          uploadTask.on("state_changed", console.log, console.error, () => {
+            storage
+              .ref("headerImageMobile")
+              .getDownloadURL()
+              .then((url) => {
+                setFileMobile(null);
+                setMobileLink(url);
+              });
+          });
+      }
+
+      useEffect(()=>{
+        storage.ref("headerImage").getDownloadURL().then(res=>setPcLink(res));
+        storage.ref("headerImageMobile").getDownloadURL().then(res=>setMobileLink(res));
+
 
 
       },[])
@@ -81,7 +81,7 @@ function Header() {
       
 
     return (
-        <header className="header">
+        <header className="header" ref={closePop}>
             <img className="pc" src={pcLink} alt="עולם היין"/>
             <img className="mobile" src={mobileLink} alt="עולם היין"/>
             {currentUser && (<div className="admin-header-buttons">

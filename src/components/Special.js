@@ -4,105 +4,122 @@ import Carousel from 'react-bootstrap/Carousel'
 import {useAuth} from "./Auth/AuthContext"
 import {Button} from "react-bootstrap"
 import {OverlayTrigger,Popover} from "react-bootstrap"
-import firebase from "./firebase"
+import {storage} from "./firebase"
 function Special() {
     const {currentUser}=useAuth();
-    const [pcUrl,setPcUrl]=useState('');
-    const [mobileUrl1,setMobileUrl1]=useState('');
-    const [mobileUrl2,setMobileUrl2]=useState('');
     const [pcLink,setPcLink]=useState('');
     const [mobileLink2,setMobileLink2]=useState('');
     const [mobileLink1,setMobileLink1]=useState('');
-
+    const [filePc, setFilePc] = useState(null);
+    const [fileMobile1, setFileMobile1] = useState(null);
+    const [fileMobile2, setFileMobile2] = useState(null);
+    const closePop=React.createRef();
+    const disable=React.createRef();
+    const f1=React.createRef();
+    const f2=React.createRef();
     const popover1 = (
         <Popover id="popover-basic">
-          <Popover.Title as="h3">הכנס כתובת תמונה</Popover.Title>
+          <Popover.Title as="h3">שינוי תמונה במחשב</Popover.Title>
           <Popover.Content>
-            <input type="text" onKeyPress={handlePcinput} value={pcUrl} onChange={handlePcinput} />
+            <input type="file" onChange={handlePcChange} />
+            <Button onClick={handlePcinput} className="mt-1" variant="dark">העלאת תמונה</Button>
           </Popover.Content>
         </Popover>
       );
+      function checkFiles(){
+        if(!disable.current)
+          return;
+        if(fileMobile1 && fileMobile2)
+        {
+          disable.current.disabled=false;
+        }
+        else
+        disable.current.disabled=true;
+      }
+
       const popover2 = (
         <Popover id="popover-basic">
-          <Popover.Title as="h3">הכנס כתובת תמונה</Popover.Title>
+          <Popover.Title as="h3">שינוי תמונות במובייל</Popover.Title>
           <Popover.Content>
-            <input type="text" onKeyPress={handleMobileinput1} value={mobileUrl1} onChange={handleMobileinput1} />
-            <input type="text" onKeyPress={handleMobileinput2} value={mobileUrl2} onChange={handleMobileinput2} />
+            <input ref={f1} type="file" onChange={handleMobileChange1} />
+            <input ref={f2} type="file" onChange={handleMobileChange2} />
+            <Button ref={disable} disabled={true} onClick={handleMobileinput} className="mt-1" variant="dark">העלאת תמונות</Button>
           </Popover.Content>
         </Popover>
       );
 
-      async function handlePcinput(e){
-        setPcUrl(e.target.value);
-        if(e.key==="Enter")
-        {
-            const database=await firebase.database().ref("SpecialPc");
-            database.set(pcUrl);
-            setPcUrl('');
-            database.on('value',(snapshot)=>{
-            const data=snapshot.val();
-            if(data){
-             setPcLink(data);
-            }
-            }
-            );
-        }
-
+      function handlePcChange(e){
+        setFilePc(e.target.files[0]);
       }
-      async function handleMobileinput1(e){
-        setMobileUrl1(e.target.value);
-        if(e.key==="Enter")
-        {
-            const database=await firebase.database().ref("SpecialMobile1");
-            database.set(mobileUrl1);
-            setMobileUrl1('');
-            database.on('value',(snapshot)=>{
-            const data=snapshot.val();
-            if(data){
-             setMobileLink1(data);
-            }
-            }
-            );
-        }
-
+      function handlePcinput(){
+        if(!filePc)
+        return;
+          const uploadTask = storage.ref("specialImage").put(filePc);
+          closePop.current.click();
+          uploadTask.on("state_changed", console.log, console.error, () => {
+            storage
+              .ref("specialImage")
+              .getDownloadURL()
+              .then((url) => {
+                setFilePc(null);
+                setPcLink(url);
+              });
+          });
       }
-      async function handleMobileinput2(e){
-        setMobileUrl2(e.target.value);
-        if(e.key==="Enter")
-        {
-            const database=await firebase.database().ref("SpecialMobile2");
-            database.set(mobileUrl2);
-            setMobileUrl2('');
-            database.on('value',(snapshot)=>{
-            const data=snapshot.val();
-            if(data){
-             setMobileLink2(data);
-            }
-            }
-            );
-        }
 
+      function handleMobileChange1(e){
+        setFileMobile1(e.target.files[0]);
+        checkFiles();
+      }
+      function handleMobileinput(){
+        if(!fileMobile1)
+          return;
+          const uploadTask = storage.ref("specialImageMobile1").put(fileMobile1);
+          uploadTask.on("state_changed", console.log, console.error, () => {
+            storage
+              .ref("specialImageMobile1")
+              .getDownloadURL()
+              .then((url) => {
+                setFileMobile1(null);
+                setMobileLink1(url);
+              });
+          });
+          handleMobileinput2();
+      }
+      function handleMobileChange2(e){
+        setFileMobile2(e.target.files[0]);
+        checkFiles();
       }
       useEffect(()=>{
-        const dbMobile1=firebase.database().ref("SpecialMobile1");
-        const dbMobile2=firebase.database().ref("SpecialMobile2");
-        const dbPc=firebase.database().ref("SpecialPc");
-        dbMobile1.on('value',(snapshot)=>{
-          const data=snapshot.val();
-           setMobileLink1(data);  
+        //eslint-disable-next-line
+        checkFiles();
+      },[fileMobile1,fileMobile2])
+      function handleMobileinput2(){
+        if(!fileMobile2)
+          return;
+          const uploadTask = storage.ref("specialImageMobile2").put(fileMobile2);
+          closePop.current.click();
+          uploadTask.on("state_changed", console.log, console.error, () => {
+            storage
+              .ref("specialImageMobile2")
+              .getDownloadURL()
+              .then((url) => {
+                setFileMobile2(null);
+                setMobileLink2(url);
+              });
           });
-        dbMobile2.on('value',(snapshot)=>{
-        const data=snapshot.val();
-            setMobileLink2(data);  
-        });
-          dbPc.on('value',(snapshot)=>{
-            const data=snapshot.val();
-             setPcLink(data);   
-            });
+      }
+
+
+      useEffect(()=>{
+        storage.ref("specialImage").getDownloadURL().then(res=>setPcLink(res));
+        storage.ref("specialImageMobile1").getDownloadURL().then(res=>setMobileLink1(res));
+        storage.ref("specialImageMobile2").getDownloadURL().then(res=>setMobileLink2(res));
+
       },[])
 
     return (
-    <div className="special-container">
+    <div className="special-container" ref={closePop}>
         <div className="special">
             <h1>SPECIAL SALE</h1>
         </div>

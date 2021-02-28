@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from 'react'
 import Product from "./Product";
-import firebase from "./firebase"
+import firebase,{storage} from "./firebase"
 
 
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -29,7 +29,9 @@ function Products({location}) {
      
        
     }, []);
-    function handleDelete(id){
+    function handleDelete(id,image){
+        const imageRef=storage.refFromURL(image).delete();
+        imageRef.delete();
         const database=firebase.database().ref("products/"+id);
         database.remove();
 

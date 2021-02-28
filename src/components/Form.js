@@ -1,10 +1,10 @@
 import React,{useState} from 'react'
 import firebase from "./firebase"
 import {storage} from "./firebase"
+import {Button} from "react-bootstrap"
 
 function Form() {
     const [title,setTitle]=useState('');
-    const [image,setImage]=useState('');
     const [price,setPrice]=useState('');
     const [ml,setMl]=useState('');
     const [file, setFile] = useState(null);
@@ -25,7 +25,6 @@ function Form() {
         + ":" + currentdate.getFullYear() + ":" 
         + currentdate.getHours() + ":" 
         + currentdate.getMinutes() + ":" + currentdate.getSeconds();
-        console.log(datetime);
         const uploadTask = storage.ref("/images/"+datetime+"/"+file.name).put(file);
         uploadTask.on("state_changed", console.log, console.error, () => {
           storage
@@ -35,7 +34,6 @@ function Form() {
             .then((url) => {
               setFile(null);
               setURL(url);
-              console.log("THE URL IS "+url);
               const position=location?"top":"bottom";
               const data={
                   title:title,
@@ -46,7 +44,6 @@ function Form() {
               }
               database.push(data);
               setTitle('');
-              setImage('');
               setPrice('');
               setMl('');
               setLocation(true);
@@ -60,10 +57,6 @@ function Form() {
     return (
         <form className="form" onSubmit={handleSubmit}>
             <h1>הוסף מוצר</h1>
-            <label>
-                <h6 className="label_name">קישור לתמונה: </h6>
-                <input value={image} onChange={e=>setImage(e.target.value)} type="text" required /> 
-            </label>
             <label>
                <h6 className="label_name">כותרת למוצר: </h6>
                 <input value={title} onChange={e=>setTitle(e.target.value)} type="text" required /> 
@@ -84,7 +77,7 @@ function Form() {
             <h6 className="label_name" style={{textAlign:"center"}}>מיקום המוצר: (במידה ולא נבחר המוצר יהיה למעלה)</h6>
             <label><input id="top"  onChange={e=>setLocation(true)} type="radio" value="למעלה" name="top"/>למעלה</label>
             <label><input id="bottom" onChange={e=>setLocation(false)} type="radio" value="למטה" name="top"/>למטה</label>
-            <button type="submit">הוסף מוצר</button>
+            <Button variant="primary" type="submit">הוסף מוצר</Button>
             
         </form>
     )

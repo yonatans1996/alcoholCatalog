@@ -15,7 +15,7 @@ function Product({image,title,price,ml,handleDelete,id}) {
             <div>
             <img className="product_line" style={{height:"auto"}} src="https://impact-il.com/wp-content/uploads/2021/02/line_18.jpg" alt={title}/>
             <h4 style={{fontSize:"26px",color:"#81051F",direction:"rtl"}}>{price}</h4>
-            {currentUser && (<Button variant="danger" onClick={()=>handleDelete(id)}>מחק</Button>)}
+            {currentUser && (<Button variant="danger" onClick={()=>handleDelete(id,image)}>מחק</Button>)}
             </div>
         </div>
     )

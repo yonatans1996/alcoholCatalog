@@ -146,17 +146,10 @@ hr{
   font-size: 18px;
   font-weight: 700;
   box-sizing: border-box;
-  background-color: sandybrown;
+  background-color: #F7F8FC;
+  height:100vh;
 }
 
-.form button{
-  font-size: 18px;
-  padding:5px 15px;
-  background-color: lightblue;
-  outline: none;
-  border: 1px solid black;
-  cursor: pointer;
-}
 .form input{
   width:100%;
 }
